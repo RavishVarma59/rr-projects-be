@@ -4,6 +4,7 @@ const validateArticle = require('../validators/articleValidator')
 
 const  getArticles = async (req, res ) => {
     try {
+        console.log("articles accessing")
        const articles = await Articles.getAllArticales();
         res.status(200).json({
             status: 200,

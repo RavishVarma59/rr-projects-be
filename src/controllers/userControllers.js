@@ -32,10 +32,8 @@ const getUser = async (req, res) => {
 
         const user = await User.getUserById(id);
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found"
-            });
+        if(!user){
+            throw new Error("invalid Credential");
         }
 
         res.status(200).json({

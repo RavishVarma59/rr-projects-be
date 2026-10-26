@@ -1,4 +1,6 @@
 const pool = require("../config/database");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const User = {
 
@@ -28,12 +30,46 @@ const User = {
                 (name, email, password)
              VALUES
                 ($1, $2, $3)
-             RETURNING *`,
+             RETURNING name, email, password`,
             [name, email, password]
         );
 
         return rows[0];
-    }
+    },
+    async getUserByEmailId(email) {
+         const { rows } = await pool.query(
+            "SELECT id, name, email FROM users WHERE email = $1",
+            [email]
+        );
+
+        return rows[0];
+    },
+    async getJWT () {
+        const user = this;
+        const token = await jwt.sign({id: user._id}, process.env.JWT_TOKEN,{
+                    expiresIn : '7d'
+                });
+
+        return token;
+    },
+
+    async velidateUserPassword (email, passwordInputByUser) {
+
+          const result = await pool.query(
+    'SELECT id, password FROM users WHERE email = $1',
+    [email]
+  );
+    if (result.rowCount === 0) {
+    return false;
+  }
+
+  const user = result.rows[0];
+    const passwordHash = user.password;
+
+    const isPasswordCorrect = await bcrypt.compare(passwordInputByUser, passwordHash)
+
+    return isPasswordCorrect;
+}
 
 };
 

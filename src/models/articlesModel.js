@@ -8,7 +8,9 @@ const Articles = {
                 a.slug,
                 a.title,
                 a.excerpt,
+                a.content,
                 a.cover_image,
+                a.read_time,
                 a.published_at,
                 c.name AS category_name,
                 c.slug AS category_slug
