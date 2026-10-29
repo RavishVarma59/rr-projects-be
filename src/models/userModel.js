@@ -16,7 +16,7 @@ const User = {
     async getUserById(id) {
 
         const { rows } = await pool.query(
-            "SELECT * FROM users WHERE id = $1",
+            "SELECT id, name, email FROM users WHERE id = $1",
             [id]
         );
 
@@ -44,9 +44,9 @@ const User = {
 
         return rows[0];
     },
-    async getJWT () {
-        const user = this;
-        const token = await jwt.sign({id: user._id}, process.env.JWT_TOKEN,{
+    async getJWT (id) {
+        console.log("user ",id, process.env.JWT_TOKEN)
+        const token = await jwt.sign({id: id}, process.env.JWT_TOKEN,{
                     expiresIn : '7d'
                 });
 

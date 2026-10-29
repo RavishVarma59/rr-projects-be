@@ -6,10 +6,19 @@ const userRoutes = require("./routes/userRoutes");
 const articlesRoutes = require('./routes/articlesRoutes');
 const categoriesRoutes = require('./routes/categoriesRoutes');
 const authroute = require('./routes/authroute');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = 7777;
 
+
+
+
+// Middleware
+app.use(express.json());
+app.use(cookieParser())
+
+// cors error 
 app.use(cors({
     origin:[
         'http://localhost:4200'
@@ -17,16 +26,10 @@ app.use(cors({
     credentials:true
 }))
 
-
-// Middleware
-app.use(express.json());
-
-
-
 // Routes
-app.use("/api/users", userRoutes); // abondand
-app.use("/api/articles", articlesRoutes);
-app.use("/api/categories",categoriesRoutes);
+app.use("/users", userRoutes); // abondand
+app.use("/articles", articlesRoutes);
+app.use("/categories",categoriesRoutes);
 app.use("/admin",authroute)
 
 

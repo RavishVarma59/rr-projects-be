@@ -84,9 +84,26 @@ const createUser = async (req, res) => {
     }
 };
 
+const getUserDetail = async(req, res) => {
+    try {
+        const userDetails = req.user;
+        if(!userDetails){
+            throw Error("User Details Not Found !");
+        }
+        res.send({
+            data : userDetails
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            message : err.message
+        })
+    }
+}
 
 module.exports = {
     getUsers,
     getUser,
-    createUser
+    createUser,
+    getUserDetail
 };

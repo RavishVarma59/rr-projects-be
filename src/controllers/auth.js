@@ -16,8 +16,9 @@ const login = async (req,res)=> {
             throw new Error("invalid credential");
         }
 
-                //Generate JWT token
-        const token = await User.getJWT();
+        //Generate JWT token
+        const user_id = user.id;
+        const token = await User.getJWT(user_id);
 
                 res.cookie('TOKEN', token, {
             httpOnly: true,
@@ -26,7 +27,7 @@ const login = async (req,res)=> {
             expires: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000)) // cookie will be removed after 8 hours
         });
 
-        res.send({data : user});
+        res.send({data : user, isLoggedIn: true});
     } catch (err) {
         console.log("error while login ",err);
         res.status(500).json({
@@ -49,8 +50,9 @@ const signup = async(req,res)=>{
             hashPassword
         );
 
-                //Generate JWT token
-        const token = await User.getJWT();
+        //Generate JWT token
+        const user_id = user.id;
+        const token = await User.getJWT(user_id);
 
         
         res.cookie('TOKEN', token, {
@@ -61,7 +63,8 @@ const signup = async(req,res)=>{
         });
         res.send({
             message : "User added successfully",
-            data : user
+            data : user,
+            isLoggedIn: true
         });
 
 
@@ -83,7 +86,7 @@ const logout = async (req, res) => {
             maxAge: 0 // cookie will be removed after 8 hours
         });
 
-        res.send({data : "logOut successfully !"});
+        res.send({data : "logOut successfully !", isLoggedIn: false});
 }
 
 module.exports = {
